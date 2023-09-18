@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Api.Extensions
 {
-    public static class DatadogSpanExtensions
+    public static class DatadogExtensions
     {
         public static ISpan SetHttpTagsFromContext(this ISpan span, HttpContext context)
         {
