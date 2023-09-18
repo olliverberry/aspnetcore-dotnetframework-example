@@ -1,4 +1,5 @@
-﻿using Datadog.Trace;
+﻿using Api.Extensions;
+using Datadog.Trace;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Diagnostics;
@@ -32,12 +33,9 @@ namespace Api.Middleware
                 finally
                 {
                     stopwatch.Stop();
-                    scope.Span.SetTag("http.host", context.Request.Host.Host);
-                    scope.Span.SetTag("http.path_group", context.Request.Path.Value);
-                    scope.Span.SetTag("http.method", context.Request.Method);
-                    scope.Span.SetTag("http.status_code", context.Response.StatusCode);
-                    scope.Span.SetTag("duration", stopwatch.ElapsedTicks);
-                    scope.Span.SetTag("span.kind", "server");
+                    scope.Span.SetHttpTagsFromContext(context)
+                        .SetTag("span.kind", "server")
+                        .SetTag("duration", stopwatch.ElapsedTicks);
                     scope.Span.ResourceName = $"{context.Request.Method} {context.Request.Path.Value}";
                 }
             }
